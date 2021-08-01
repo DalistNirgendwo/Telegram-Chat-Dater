@@ -1,8 +1,18 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QPushButton
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import matplotlib.pyplot as plt
 import json
 import pandas as pd
+
+
+def fileloader(file):
+    f = open(file, encoding='utf-8')
+    data = json.load(f)
+    f.close()
+    return data
 
 
 def popper(data):
@@ -51,6 +61,8 @@ def popper(data):
     plt.bar(*zip(*time.items()))
     plt.show()
 
+    return dates
+
 
 class App(QWidget):
 
@@ -67,10 +79,14 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        comboBox = QComboBox(self)
+        comboBox.move(100, 60)
+
         button = QPushButton('Load file', self)
         button.setToolTip('Click this button to load a .json file.')
         button.move(100, 40)
         button.clicked.connect(self.openFileNameDialog)
+        # button.clicked.connect(self.comboBox.addItem("Schwanz"))
 
         self.show()
 
@@ -79,12 +95,13 @@ class App(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
             self, "QFileDialog.getOpenFileName()", "", "All Files (*);;Python Files (*.py)", options=options)
-        f = open(fileName, encoding='utf-8')
-        data = json.load(f)
-        f.close()
         if fileName:
             print(fileName)
-            popper(data)
+            # popper(fileloader(fileName))
+            # for i in range(5):
+            #     self.initUI().comboBox.addItem(f"{i}")
+            self.comboBox2 = QComboBox(self)
+       
 
 
 if __name__ == '__main__':
